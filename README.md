@@ -1,0 +1,974 @@
+# Kito Pizzas
+Análisis de archivos del release del 2025 del juego Kito Pizzas. El juego con sus archivos pueden comprarse aquí:
+https://cafecito.app/kitopizzas
+
+Para correrlo en sistemas con mucha RAM, puede dar el error "nexus too small". En ese caso, hacer un acceso directo a kp.exe y agregarle el parámetro "- nx 128" (sin comillas) al final del Destino.
+
+Mundos disponibles:
+- ciudad
+- gruta
+- rio 
+- space
+
+# Pantalla inicial para agarrar pizzas
+- POMO.MDL
+- MASTIL.MDL
+- lanza.wav
+- 1.MDL: Triangulo con numeros
+- 2.MDL: Triangulo con numeros
+- 3.MDL: Triangulo con numeros
+- TOLDO.MDL
+- inicio.mp3
+- inicio.wdl
+- inicio.wmb
+- skat_fin.MDL
+- skat_ini.mdl
+- TACHO.MDL
+- camara.txt
+- kito.txt
+- can_lft.mdl
+- can_mid.mdl
+- can_rgt.mdl
+- CANO.MDL
+- CANON2.MDL: unused?
+- celeste.bmp
+- CHIME.MDL
+- GIRA1.MDL
+- ENGRA.MDL
+- fuegoh.MDL
+- fuegov.MDL
+- MQES.MDL
+- PISA.MDL
+- PISTON.MDL
+- PIZZA.MDL
+- 
+# Mundo ciudad
+- puente.tga
+- poli.wav
+- pisob.tga
+- pared1.MDL
+- pared2.MDL
+- pared3.MDL
+- pared4.MDL
+- obel.wmb
+- negocio.MDL
+- negocio2.MDL
+- negocio3.MDL
+- negocio4.MDL
+- multa.wav
+- moto.tga
+- maeypi.wav
+- man1.wmb
+- man2.wmb
+- man3.wmb
+- man4.wmb
+- man5.wmb
+- man6.wmb
+- man7.wmb
+- manzana.wmb
+- kiosco.MDL
+- kiosco1.MDL
+- kiosco1b.MDL
+- iglesia1.MDL
+- fondoI.tga
+- fondoP.tga
+- fondoPh.tga
+- fondoR.tga
+- fondoR1.tga
+- fondoR1h.tga
+- fondoR2.tga
+- fondoR3.tga
+- fondoR3h.tga
+- esquin1.MDL
+- esquin1c.MDL
+- esquin2.MDL
+- esquin2b.MDL
+- fabrica.MDL
+- FLECHA.MDL
+- strenb.tga
+- bondi.wav
+- BUZON.MDL
+- uno.HMP
+- ciudad#a.PCX
+- restaur.MDL
+- reloj.wav
+- ciudad.MDL
+- ciudad.PCX
+- ciudad.sco: puntajes
+- ciudad.wdl
+- Ciudad.wmb
+- cine_0.MDL
+- cine_1.MDL
+- cine_2.MDL
+- cine_3.MDL
+- c_aantig.mdl
+- c_barre.mdl
+- c_bondi.mdl
+- c_Buzon.mdl
+- c_c.txt
+- c_camion.mdl
+- c_cartel.mdl
+- c_cono.mdl
+- c_esco.mdl
+- c_flecha.mdl
+- c_frontal.mdl
+- c_ia.txt
+- c_io.txt
+- c_jeep1.mdl
+- c_jeep2.mdl
+- c_jeep3.mdl
+- c_kitoa.mdl
+- c_kitob.mdl
+- c_kitop.mdl
+- c_lateral.mdl
+- c_maeypi.mdl
+- c_marca.tga
+- c_np.txt
+- c_obel.MDL
+- c_objetos.txt
+- c_oe.txt
+- c_p.txt
+- c_p1.mdl
+- c_p2.mdl
+- c_p3.mdl
+- c_pizza.mdl
+- c_poli.mdl
+- c_polip.mdl
+- c_preg.txt
+- c_sbondi.tga
+- c_scab.tga
+- c_scalla.tga
+- c_scontr.tga
+- c_scordo.tga
+- c_scorr.tga
+- c_sema2.mdl
+- c_sesco.tga
+- c_sgirder.tga
+- c_sgirizq.tga
+- c_slaval.tga
+- c_smax40.tga
+- c_spuente.tga
+- c_srecon.tga
+- c_sriva.tga
+- c_strena.MDL
+- c_taxi.mdl
+- c_tren.mdl
+- c_valla.mdl
+- c_van1a.mdl
+- c_van1b.mdl
+- c_van1c.mdl
+- c_vtren.MDL
+
+- c1.mpg
+- c2.mpg
+- c3.mpg
+- c4.mpg
+- c5.mpg
+- c6.mpg
+- c7.mpg
+- c8.mpg
+- c9.mpg
+- antig.wav
+- cabildo.MDL
+
+- vel1.tga: velocimetro
+- vel2.tga: velocimetro
+
+- ok01.wav
+- ok02.wav
+- ok03.wav
+- ok04.wav
+- ok05.wav
+- ok06.wav
+- ok07.wav
+- ok08.wav
+- ok09.wav
+- ok10.wav
+- ok11.wav
+- ok12.wav
+- ok13.wav
+- ok14.wav
+- ok15.wav
+- ok16.wav
+- ok17.wav
+- ok18.wav
+- ok19.wav
+- ok20.wav
+- ok21.wav
+- ok22.wav
+- ok23.wav
+- ok24.wav
+- ok25.wav
+- ok26.wav
+- ok27.wav
+- ok28.wav
+- ok29.wav
+- ok30.wav
+- ok31.wav
+- ok32.wav
+- ok33.wav
+- ok34.wav
+- ok35.wav
+- ok36.wav
+- ok37.wav
+- ok38.wav
+- ok39.wav
+- ok40.wav
+- ok41.wav
+- ok42.wav
+- ok43.wav
+- ok44.wav
+- ok45.wav
+- ok46.wav
+- ok47.wav
+- ok48.wav
+- ok49.wav
+- ok50.wav
+- ok51.wav
+- ok52.wav
+- ok53.wav
+- ok54.wav
+- ok55.wav
+- ok56.wav
+
+- imagen de ciudad Nueva.tga
+
+- camion.wav
+- cantero.mdl
+
+- CARTEL.MDL
+- casa1.MDL
+- casa1b.MDL
+- casa2.MDL
+- casaa.MDL
+- casab.MDL
+- casac.MDL
+- casad.MDL
+- casae.MDL
+- casag1.MDL
+- casag1b.MDL
+- casag1c.MDL
+- casag2.MDL
+- casag5.MDL
+- ctren.wav ciudad
+- edif1.MDL
+- edif1b.MDL
+- edif1c.MDL
+- edif2.MDL
+- edif2b.MDL
+- edif2c.MDL
+- edif3.MDL
+- edif3b.MDL
+- edif3c.MDL
+- edif4.MDL
+- edif4b.MDL
+- edif4c.MDL
+- edif5.MDL
+- edif5b.MDL
+- edif5c.MDL
+- escuela.MDL
+- i1.MDL
+- i10.MDL
+- i10.tga
+- i101.tga
+- i102.tga
+- i103.tga
+- i11.MDL
+- i12.MDL
+- i13.MDL
+- i131.tga
+- i132.tga
+- i133.tga
+- i14.MDL
+- i140.tga
+- i15.MDL
+- i16.MDL
+- i17.MDL
+- i18.MDL
+- i19.MDL
+- i191.tga
+- i192.tga
+- i193.tga
+- i2.MDL
+- i20.MDL
+- i201.tga
+- i202.tga
+- i203.tga
+- i211.tga
+- i212.tga
+- i213.tga
+- i240.tga
+- i251.tga
+- i252.tga
+- i253.tga
+- i261.tga
+- i262.tga
+- i263.tga
+- i270.tga
+- i3.MDL
+- i30.tga
+- i4.MDL
+- i5.MDL
+- i6.MDL
+- i61.tga
+- i62.tga
+- i63.tga
+- i7.MDL
+- i8.MDL
+- i9.MDL
+- i90.tga
+# Mundo gruta
+- puertaa.wav
+- puertac.wav
+- reja.tga
+- rejaa.wav
+- rejac.wav
+- pingu.wav
+- pinchea.wav
+- pinchec.wav
+- murci.wav
+- minot.wav
+- mapa.wav
+- trampa.wav
+- vapor.wav
+- arania.wav
+- g_aran.MDL
+- g_b1fin.MDL
+- g_b2fin.MDL
+- g_b3fin.MDL
+- g_b4fin.MDL
+- g_b5fin.MDL
+- g_b6fin.MDL
+- g_b7fin.MDL
+- g_b8fin.MDL
+- g_b9fin.MDL
+- g_c.txt
+- g_canio1.MDL
+- g_canio2.MDL
+- g_celda.MDL
+- g_coco.MDL
+- g_distri.MDL
+- g_esfin.MDL
+- g_esta1.MDL
+- g_esta2.MDL
+- g_foso.MDL
+- g_gorila.MDL
+- g_ia.txt
+- g_io.txt
+- g_kito.MDL
+- g_la+35.tga
+- g_lb+15.tga
+- g_luz.tga
+- g_mapa.tga
+- g_marca.MDL
+- g_murci.MDL
+- g_objetos.txt
+- g_oe.txt
+- g_ojo.MDL
+- g_p.txt
+- g_p1.MDL
+- g_p2.MDL
+- g_p3.MDL
+- g_pin.MDL
+- g_pinche.MDL
+- g_pingui.MDL
+- g_pizza.mdl
+- g_puerta.MDL
+- g_reja.MDL
+- g_roca.MDL
+- g_roca1.MDL
+- g_roca2.MDL
+- g_serp.MDL
+- g_sierra.MDL
+- g_sk+15.tga
+- g_skate.MDL
+- g_smk.tga
+- g_sna+2.tga
+- g_snk+2.tga
+- g_t1.MDL
+- g_t2.MDL
+- g_t3.MDL
+- g_t4.MDL
+- g_t5.MDL
+- g_t6.MDL
+- g_t7.MDL
+- g_t8.MDL
+- g_t9.MDL
+- g_taa1.mdl
+- g_tala.MDL
+- g_tbase.MDL
+- g_tbb1.mdl
+- g_tdd1.mdl
+- g_tdf1.mdl
+- g_tgd1.mdl
+- g_tgi1.mdl
+- g_tif1.mdl
+- g_tii1.mdl
+- g_trampa.MDL
+- g_trc1.mdl
+- g_trf1.mdl
+- g_trp1.mdl
+- g_trr1.mdl
+- g_va+16.tga
+- g0.mpg
+- g1.mpg
+- g2.mpg
+- g3.mpg
+- g4.mpg
+- g5.mpg
+- g6.mpg
+- g7.mpg
+- tala.wav
+- tecla.wav
+- coco.wav
+- ecaida.wav
+- gruta#a.PCX
+- gruta.PCX
+- salto.wav
+- gruta.sco: puntajes
+- gruta.wdl
+- gruta.wmb
+- sierra.wav
+- serpi.wav
+- sele.wav
+
+# Mundo rio
+- rio#a.PCX
+- rio.PCX
+- rio.sco: puntajes
+- rescasafin.BMP
+- resmuellea.BMP
+- muellea.BMP
+- muellea.MDL
+- muelleb.MDL
+- muellec.MDL
+- islaa.MDL
+- islab.MDL
+- islac.MDL
+- islad.MDL
+- islae.MDL
+- islaf.MDL
+- islag.MDL
+- islah.MDL
+- islaz.MDL
+
+- carqueja.tga
+- burbu.wav
+- t_agua.mdl
+- t_arba.mdl
+- t_arbb.mdl
+- t_arbc.mdl
+- t_arbd.mdl
+- t_arbe.mdl
+- t_arboa.tga
+- t_arbob.tga
+- t_arboc.tga
+- t_arbod.tga
+- t_boyaa.mdl
+- t_c.txt
+- t_casac.mdl
+- t_choque.wav
+- t_cocod.mdl
+- t_cocod.wav
+- t_colec.wav
+- t_colecb.mdl
+- t_fin.txt
+- t_fondoa.MDL
+- t_gordo.mdl
+- t_ia.txt
+- t_io.txt
+- t_jetski.wav
+- t_junco.MDL
+- t_kitoaa.mdl
+- t_kitoch.mdl
+- t_kitos.mdl
+- t_lancha.wav
+- t_lisob.txt
+- t_maest.mdl
+- t_marca.mdl
+- t_objetos.txt
+- t_oe.txt
+- t_p.txt
+- t_p1.mdl
+- t_p2.mdl
+- t_p3.mdl
+- t_palma.MDL
+- t_pato.wav
+- t_patos.mdl
+- t_pingui.mdl
+- t_pira.mdl
+- t_pira.wav
+- t_pizza.mdl
+- t_puentb.mdl
+- t_repo.MDL
+- t_rocaa.mdl
+- t_sombri.MDL
+- t_tronco.mdl
+- t_vele.mdl
+- t_veleb.mdl
+- t0.mpg
+- t1.mpg
+- t2.mpg
+- t3.mpg
+
+## Árboles
+- arb1bok.tga
+- arb1ok.tga
+- arb2bok.tga
+- arb3bok.tga
+- arb4b.tga
+- arb5b.tga
+- arb6b.tga
+- arbol1.MDL: roto?
+- arbol2.mdl: roto?
+- arbol3.mdl: roto?
+- arco2.MDL: roto?
+
+- casafin.BMP: unused?
+- casafin.mdl
+
+# Mundo space
+- puente1.MDL
+- piso.hmp
+- nave.MDL
+- nave+25.tga
+- nave1b.MDL
+- nave2.MDL
+- nave2d.MDL
+- nave3b.MDL
+- mina.MDL
+- hormiga1.MDL: unused
+- hormiga2.MDL
+- roca.wav
+- roca1.MDL
+- roca10.MDL
+- roca11.MDL
+- roca12.MDL
+- roca2.MDL
+- roca3.MDL
+- roca4.MDL
+- roca5.MDL
+- roca6.MDL
+- roca7.MDL
+- roca8.MDL
+- roca9.MDL
+- aro.MDL?
+- borde.MDL?
+- s0.mpg
+- s1.mpg
+- s2.mpg
+- s3.mpg
+- s4.mpg
+- s5.mpg
+- s6.mpg
+- s7.mpg
+- s8.mpg
+- s9.mpg
+- s_alto.MDL
+- s_arco1.MDL
+- s_aylind.MDL
+- s_bajo.MDL
+- s_bar.MDL
+- s_barra.MDL
+- s_c.txt
+- s_choca.wav
+- s_cohete.MDL
+- s_fijo1.MDL
+- s_fijo2.MDL
+- s_fondoR.tga
+- s_frontal.MDL
+- s_hormi.wav
+- s_ia.txt
+- s_io.txt
+- s_kito.MDL
+- s_kitod.MDL
+- s_lateral.MDL
+- s_marca.MDL
+- s_marca.tga
+- s_mesa.MDL
+- s_mesa1.MDL
+- s_mesa2.MDL
+- s_midi.MDL
+- s_nave.MDL
+- s_nave1.MDL
+- s_nave1.wav
+- s_nave2.MDL
+- s_nave2.wav
+- s_nave3.MDL
+- s_nave3.wav
+- s_naveg.MDL
+- s_np.txt
+- s_objetos.txt
+- s_oe.txt
+- s_p.txt
+- s_p1.MDL
+- s_p2.MDL
+- s_p3.MDL
+- s_pbarra.MDL
+- s_pisob.MDL
+- s_pizza.mdl
+- s_ppuer.MDL
+- s_puerta.MDL
+- s_radar1.wav
+- s_radar2.wav
+- s_robot.wav
+- s_skate.MDL
+- s_ta.txt
+- s_ta1.wav
+- s_ta2.wav
+- s_ta3.wav
+- s_ta4.wav
+- s_ta5.wav
+- s_ta6.wav
+- s_ta7.wav
+- s_ta8.wav
+- s_ta9.wav
+- s_tk.txt
+- s_tk1.wav
+- s_tk2.wav
+- s_tk3.wav
+- s_tk4.wav
+- s_tk5.wav
+- s_tk6.wav
+- s_tk7.wav
+- s_tk8.wav
+- s_tk9.wav
+- s_torre1.MDL
+- s_vehi.wav
+- space.PCX
+- space.wdl
+- space.wmb
+- vehic1.MDL
+- vehic2.MDL: unused?
+- capsula.MDL
+- star+25.tga
+- star+25b.tga: unused
+- space#a.PCX: unused
+- satelit1.MDL
+- satelit2.MDL
+- satelit3.MDL
+- robot1.MDL
+- robotok.MDL
+
+# Mundo del cuerpo humano?
+- a_c.txt
+- a_cam2gs.txt
+- a_io.txt
+- a_np0.txt
+- a_np1.txt
+- a_np2.txt
+- a_objetos.txt
+- a_oe.txt
+- a_p.txt
+- a_preg0.txt
+- a_preg1.txt
+- a_preg2.txt
+
+# Mundo del futbol?
+- x_c.txt
+- x_ia.txt
+- x_io.txt
+- x_objetos.txt
+- x_oe.txt
+- x_p.txt
+- f_c.txt
+- f_ch.txt
+- f_ia.txt
+- f_objetos.txt
+- f_oe.txt
+- f_p.txt
+- f_rp0.txt
+- f_rp1.txt
+- f_rp2.txt
+
+# Mundo de la escuela?
+- e_c.txt
+- e_ia.txt
+- e_objetos.txt
+- e_oe.txt
+- e_p.txt
+
+# Mundo de los helados?
+- h_c1.txt
+- h_c2.txt
+- h_c3.txt
+- h_c4.txt
+- h_c5.txt
+- h_o1.txt
+- h_o2.txt
+- h_o4.txt
+- h_o5.txt
+- h_objetos.txt
+
+# Mundo del castillo?
+- k_c.txt
+- k_c1.txt
+- k_c2.txt
+- k_c3.txt
+- k_ia.txt
+- k_io.txt
+- k_objetos.txt
+- k_oe.txt
+- k_p.txt
+
+# Mundos varios y puntajes/puntos
+- pPizza.mdl
+- score.bmp
+- score.tga
+- aceituna.MDL
+- fondoPnt.bmp
+- puntos.wdl
+- puntos.wmb
+- reloj.MDL
+- tomate.MDL
+- gral.wdl
+- tmp.sco 
+- TICKET.MDL
+- tigre.wdl
+- tigre.wmb
+- jb+15.tga
+- col072.bmp
+- col077.bmp
+- linea.wav
+- salame.MDL
+- premio.wav: gruta/ciudad/space/tigre
+
+# Puntaje total
+- total.wav
+- total.wdl
+- TOTAL.wmb
+- fondoTot.bmp
+
+# Mundo final
+- placer1.wav
+- placer2.wav
+- placer3.wav
+- nube1.MDL
+- nube2.MDL
+- nube3.MDL
+- nube4.MDL
+- nube5.MDL
+- mastica.wav
+- cabeza.MDL
+- cabeza2.MDL
+- cabeza3.MDL
+- camfin.txt
+- final.wdl
+- final.wmb
+- centro.MDL
+- dientab.MDL
+- dientar.MDL
+- fcohete.MDL
+- lanzapi.wav
+- x1.mpg: video final
+- x2.mpg: video final
+- x3.mpg: video final
+
+# Desconocido
+- 640x480n.bmp: Pantalla negra
+- v_objetos.txt
+- cam_ref.mdl
+- sky.bmp
+- 
+
+# Sonidos varios
+- agacha.wav
+- agarra.wav
+- cae.wav: Sonido del counter strike cuchillo? 
+
+# Tipografías/Fonts
+- Arial_total.bmp
+- Arial18.bmp
+- Arial18_2.bmp
+- Arial18lozo.bmp
+- Arial36.bmp
+- ArialP.bmp
+- LcdD44.bmp
+- lozo2.bmp
+- lozo3.bmp
+- fontP.bmp
+- fontPd.bmp
+- fontPh.bmp
+# Desconocido
+- b_c.txt
+- b_cam2gs.txt
+- b_eve_1A.mdl
+- b_eve_1bjugar.mdl
+- b_eve_1bjugar_ciudad.mdl
+- b_eve_1bjugar_gruta.mdl
+- b_eve_1bjugar_rio.mdl
+- b_eve_1bjugar_space.mdl
+- b_eve_1Bmusica.mdl
+- b_eve_2A.mdl
+- b_eve_2bopciones.mdl
+- b_eve_2Bsonido.mdl
+- b_eve_3A.mdl
+- b_eve_3branking.mdl
+- b_eve_3Bresolucion.mdl
+- b_eve_4A.mdl
+- b_eve_4bayuda.mdl
+- b_eve_4Bvideos.mdl
+- b_eve_ant.mdl
+- b_eve_ayuda.mdl
+- b_eve_ciudada.mdl
+- b_eve_ciudadb.mdl
+- b_eve_flecha.mdl
+- b_eve_GrutaA.mdl
+- b_eve_grutab.mdl
+- b_eve_ranking.mdl
+- b_eve_RioA.mdl
+- b_eve_riob.mdl
+- b_eve_sig.mdl
+- b_eve_SpaceA.mdl
+- b_eve_spaceb.mdl
+- b_eve_timer.mdl
+- b_eve_Volver.mdl
+- b_ka.txt
+- b_ke1.txt
+- b_ke2.txt
+- b_ke3.txt
+- b_p.txt
+
+# Varios
+- BABOLLO.MDL: piso con degradé
+- BALIZA.MDL: baliza azul con punta roja
+- bayuda.mdl: ?
+- bollohi.MDL: esfera blanca
+- bot_tex.bmp: textura celeste
+- bot_tex.pcx: textura celeste
+- choque.wav: ciudad/gruta/tigre
+- stars.wav: gruta/ciudad/tigre/space
+- 
+
+# Menues
+- salir.tga
+- salir_menu.tga
+- pointer.pcx
+- pausa.tga
+- mouse_dw_h.tga
+- mouse_up_h.tga
+- menu.wdl
+- menu.wmb
+- m_c1.txt
+- m_c2.txt
+- m_c3.txt
+- m_c4.txt
+- m_c5.txt
+- m_i1.txt
+- m_i2.txt
+- m_i3.txt
+- m_i4.txt
+- m_i5.txt
+- m_Jetski.tga
+- m_Moto.tga
+- m_nave.tga
+- m_objetos.txt
+- m_Skate.tga
+- load_level_screens.mdl
+- kito_cabeza.mdl
+- kito_cuerpo.mdl
+- kito_fin.MDL
+- kito_ini.mdl
+- kito_Ojos.mdl
+- Fondo.tga
+- fondo_800x600.tga: unused?
+- fondo_ayuda.mdl
+- sombra_0.tga
+- sombra_1.tga
+- sombra_2.tga
+- sombra_3.tga
+- sombra_4.tga
+- sombra1.mdl
+- sombra1.tga
+- sombra2.mdl
+- sombra3.mdl
+- sombra4.mdl
+- botmenu.wdl: script de menues
+- Boton_ciudadA.mdl
+- Boton_CiudadB.mdl
+- Boton_GrutaA.mdl
+- boton_grutab.mdl
+- Boton_RioA.mdl
+- boton_riob.mdl
+- Boton_SpaceA.mdl
+- boton_spaceb.mdl
+- Boton_Volver.mdl
+- btn_salir_no.tga
+- btn_salir_no-over.tga
+- btn_salir_si.tga
+- btn_salir_si-over.tga
+- kito_say_ayuda.wav
+- kito_say_ciudad.wav
+- kito_say_efectos.wav
+- kito_say_gruta.wav
+- kito_say_jugar.wav
+- kito_say_musica.wav
+- kito_say_opciones.wav
+- kito_say_ranking.wav
+- kito_say_resolucion.wav
+- kito_say_rio.wav
+- kito_say_space.wav
+- kito_say_videos.wav
+- kitolips.wdl
+- kout+20.tga
+- kp.exe
+- kp.ico
+- kp.wdl: script inicial?
+- kp.wmb
+- submenu.wdl
+- espacio.sco: puntajes
+- control.txt
+- panel.pcx
+- paneles.wdl
+- panelp.tga
+- panelt.tga
+- creditos.tga
+- panmenu.bmp
+- panmenu.tga
+- panmenu_ind.bmp
+- panmenu_ind.mdl
+ 
+# Músicas
+- track1.mp3
+- track2.mp3
+- track3.mp3
+- track4.mp3
+- final.mp3
+- final.wav
+
+# Otras
+- test.tga
+- UnInst.log 
+
+- logolite.pcx
+- LogoMalabar.tga
+- Magic.tga
+
+- Copia de g_roca.MDL
+- Copia de v_objetos.txt
+- cielo1.bmp: unused?
+- cielo1.tga: unused?
+- CIELO2.bmp: unused?
+- cielo2.tga: unused?
+- curva.txt: unused?
+- d_tema1.txt: unused?
+- d_tema2.txt: unused?
+- d_tema3.txt: unused?
+- debug.txt: output debug info
+- hola.wav
+- mousepro.dll
+- objetos.txt
+- opciones.wdl
+- options.cfg
+- options.txt
+- out+16.tga
+- PALETTE.RAW
+- palette.pcx
+- pizza.tga
+- pizza.txt
+- pizzaOrig.tga
+- Plano Fondo.mdl
+- pro_wav_amp.dll
+- ranking_der.mdl: unused?
+- ranking_izq.mdl: unused?
+
