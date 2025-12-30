@@ -1,14 +1,38 @@
 # Kito Pizzas
-Análisis de archivos del release del 2025 del juego Kito Pizzas. El juego con sus archivos pueden comprarse aquí:
-https://cafecito.app/kitopizzas
+En el 2025 liberaron una primera versión del juego Kito Pizzas. [El juego puede comprarse aquí](https://cafecito.app/kitopizzas). 
 
-Para correrlo en sistemas con mucha RAM, puede dar el error "nexus too small". En ese caso, hacer un acceso directo a kp.exe y agregarle el parámetro "- nx 128" (sin comillas) al final del Destino.
+Corre en Windows 11, pero si se tiene un sistema con mucha RAM, puede dar el error "nexus too small". En ese caso, hacer un acceso directo a kp.exe y agregarle el parámetro "-nx 128" (sin comillas) al final del Destino.
+
+Encontraste alguna cosa interesante? Podés contribuir a este archivo enviando un pull request.
+
+# Detalles técnicos
+
+Kito Pizzas usa el motor 3d Game Studio (3DGS) de Conitec, en su versión A6 (6.20). Una versión más moderna y con modo gratuito se puede descargar desde http://www.opserver.de/down/gstudio8_setup.exe. La misma soporta editar los archivos WDL usados en el juego.
 
 Mundos disponibles:
+- mundo inicial (pantalla para agarrar pizzas/vidas)
 - ciudad
 - gruta
 - rio 
 - space
+- mundo final (nubes y 3 cabezas gigantes)
+
+Hay también archivos que parecen pertenecer a mundos no incluidos en el juego, como un mundo del cuerpo humano, un mundo de futbol, un mundo de escuela, un mundo de helados y un mundo de castillo.
+
+Luego de instalado, es posibble moddear los archivos en la carpeta de instalación, para cambiar modelos 3D, texturas, sonidos, etc. 
+
+Los archivos del juego están en distintos formatos:
+- Wav y mp3: archivos de sonido y música
+- TGA y BMP: texturas y fondos, algunas no se usan directamente
+- MDL: modelos 3D (incluye animaciones y texturas)
+- PCX: texturas y fondos, algunas no se usan directamente
+- SCO: archivos que contienen puntajes
+- WDL: scripts del motor 3DGS. Están sin ofuscar pero por alguna razón no tienen los fines de línea, lo que dificulta su lectura.
+- WMB: archivos multimedia del motor 3DGS (videos, sonidos, música)
+- MPG: videos
+- TXT: archivos de texto con scripts y datos varios
+
+[Script para crear screenshots de todos los modelos 3D](screenshot_mdl.py)
 
 # Pantalla inicial para agarrar pizzas
 - POMO.MDL
@@ -41,14 +65,14 @@ Mundos disponibles:
 - PISA.MDL
 - PISTON.MDL
 - PIZZA.MDL
-- 
+
 # Mundo ciudad
 - puente.tga
 - poli.wav
 - pisob.tga
 - pared1.MDL
 - pared2.MDL
-- pared3.MDL
+- pared3.MDL: "kito 2003"
 - pared4.MDL
 - obel.wmb
 - negocio.MDL
@@ -157,8 +181,7 @@ Mundos disponibles:
 - c_van1a.mdl
 - c_van1b.mdl
 - c_van1c.mdl
-- c_vtren.MDL
-
+- c_vtren.MDL: baranda del paso a nivel
 - c1.mpg
 - c2.mpg
 - c3.mpg
@@ -170,10 +193,8 @@ Mundos disponibles:
 - c9.mpg
 - antig.wav
 - cabildo.MDL
-
 - vel1.tga: velocimetro
 - vel2.tga: velocimetro
-
 - ok01.wav
 - ok02.wav
 - ok03.wav
@@ -230,12 +251,9 @@ Mundos disponibles:
 - ok54.wav
 - ok55.wav
 - ok56.wav
-
 - imagen de ciudad Nueva.tga
-
 - camion.wav
 - cantero.mdl
-
 - CARTEL.MDL
 - casa1.MDL
 - casa1b.MDL
@@ -317,6 +335,7 @@ Mundos disponibles:
 - i8.MDL
 - i9.MDL
 - i90.tga
+
 # Mundo gruta
 - puertaa.wav
 - puertac.wav
@@ -519,10 +538,10 @@ Mundos disponibles:
 - arb4b.tga
 - arb5b.tga
 - arb6b.tga
-- arbol1.MDL: roto?
-- arbol2.mdl: roto?
-- arbol3.mdl: roto?
-- arco2.MDL: roto?
+- arbol1.MDL
+- arbol2.mdl
+- arbol3.mdl
+- arco2.MDL
 
 - casafin.BMP: unused?
 - casafin.mdl
@@ -530,10 +549,10 @@ Mundos disponibles:
 # Mundo space
 - puente1.MDL
 - piso.hmp
-- nave.MDL
+- nave.MDL: lo que dice
 - nave+25.tga
 - nave1b.MDL
-- nave2.MDL
+- nave2.MDL: nave azul
 - nave2d.MDL
 - nave3b.MDL
 - mina.MDL
@@ -809,7 +828,7 @@ Mundos disponibles:
 - b_eve_4bayuda.mdl
 - b_eve_4Bvideos.mdl
 - b_eve_ant.mdl
-- b_eve_ayuda.mdl
+- b_eve_ayuda.mdl: disco 3d con instrucciones
 - b_eve_ciudada.mdl
 - b_eve_ciudadb.mdl
 - b_eve_flecha.mdl
@@ -864,9 +883,9 @@ Mundos disponibles:
 - m_nave.tga
 - m_objetos.txt
 - m_Skate.tga
-- load_level_screens.mdl
+- load_level_screens.mdl: imagenes de carga de cada nivel
 - kito_cabeza.mdl
-- kito_cuerpo.mdl
+- kito_cuerpo.mdl: lo que dice
 - kito_fin.MDL
 - kito_ini.mdl
 - kito_Ojos.mdl
@@ -878,11 +897,11 @@ Mundos disponibles:
 - sombra_2.tga
 - sombra_3.tga
 - sombra_4.tga
-- sombra1.mdl
+- sombra1.mdl: sombra de la porción de pizza del menú
 - sombra1.tga
-- sombra2.mdl
-- sombra3.mdl
-- sombra4.mdl
+- sombra2.mdl: sombra de la porción de pizza del menú
+- sombra3.mdl: sombra de la porción de pizza del menú
+- sombra4.mdl: sombra de la porción de pizza del menú
 - botmenu.wdl: script de menues
 - Boton_ciudadA.mdl
 - Boton_CiudadB.mdl
@@ -939,11 +958,9 @@ Mundos disponibles:
 # Otras
 - test.tga
 - UnInst.log 
-
 - logolite.pcx
 - LogoMalabar.tga
-- Magic.tga
-
+- Magic.tga: logo magic mal hecho
 - Copia de g_roca.MDL
 - Copia de v_objetos.txt
 - cielo1.bmp: unused?
@@ -971,4 +988,3 @@ Mundos disponibles:
 - pro_wav_amp.dll
 - ranking_der.mdl: unused?
 - ranking_izq.mdl: unused?
-
