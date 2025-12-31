@@ -34,6 +34,8 @@ Los archivos del juego están en distintos formatos:
 
 [Script para crear screenshots de todos los modelos 3D](screenshot_mdl.py)
 
+[Script para crear renderizar algunos modelos MDL](mdl_viewer.py)
+
 # Pantalla inicial para agarrar pizzas
 - POMO.MDL
 - MASTIL.MDL
