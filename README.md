@@ -34,7 +34,24 @@ Los archivos del juego están en distintos formatos:
 
 [Script para crear screenshots de todos los modelos 3D](screenshot_mdl.py)
 
-[Script para crear renderizar algunos modelos MDL](mdl_viewer.py)
+# Modificar scripts para que corra en motor 3DGS más moderno
+Con un poco de trabajo es posible modificar los scripts del juego para que corran en versiones más modernas del motor 3DGS. 
+Esto solo sirve en una versión completa de la V7, [o el trial de la 6.40](http://download.conitec.net/gsdemo.exe). No se probó en la V8 ya que no conseguí una versión completa.
+
+Cambios realizados: En los scripts WDL, 
+- comentar las llamadas a funciones play_sound|play_loop|tune_sound|stop_sound 
+- comentar rotate(...) en inicio.wdl
+- comentar create(<out+16.tga>, ) en ciudad.wdl
+- reemplazar clip_range por camera.clip_far
+- reemplazar `synonym xyz {type entity}` por `entity* xyz` y luego `xyz=ptr_for_name("xyz");` al principio de la función que inicializa a ese script (por lo general tiene el mismo nombre que el script)
+- reemplazar `while (movie_frame != 0)` por `while(0)`
+
+Algunos de los cambios rompen funcionalidades del juego, pero permiten correrlo sin errores.
+La lista de cambios fue obtenida de la [documentación de 3DGS, sección "Obsolete Keywords"](http://manual.conitec.net/aAnhang_Syntax.htm).
+
+# Renderizar los modelos MDL fuera del juego
+
+[Script para crear renderizar los modelos MDL](mdl_viewer.py)
 
 # Pantalla inicial para agarrar pizzas
 - POMO.MDL
