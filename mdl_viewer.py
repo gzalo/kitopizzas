@@ -5,39 +5,97 @@ from OpenGL.GLU import *
 import numpy as np
 from mdl_loader import MDL
 import sys
+import os
+import glob
 
 class MDLViewer:
-    def __init__(self, filename):
-        self.mdl = MDL()
-        self.mdl.load(filename)
-        
+    def __init__(self, folder=None):
         self.width = 800
         self.height = 600
+        pygame.init()
+        pygame.font.init()
         self.screen = pygame.display.set_mode((self.width, self.height), DOUBLEBUF | OPENGL)
         pygame.display.set_caption("MDL Viewer")
-        
+        self.font = pygame.font.SysFont('Arial', 18)
+        self.font_large = pygame.font.SysFont('Arial', 24)
+
+        # Find all MDL files in folder
+        if folder is None:
+            folder = os.getcwd()
+        self.folder = folder
+        self.mdl_files = sorted(glob.glob(os.path.join(folder, "*.mdl")))
+        if not self.mdl_files:
+            print(f"No MDL files found in {folder}")
+            sys.exit(1)
+
+        self.current_index = 0
+        self.show_file_list = False
+        self.list_scroll_offset = 0
+
+        # Load first file
+        self.mdl = None
+        self.texture_id = None
+
         # Setup OpenGL state
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_CULL_FACE)
         glCullFace(GL_FRONT)
-        
+
         # Setup Projection
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
         gluPerspective(45, (self.width / self.height), 0.1, 10000.0)
         glMatrixMode(GL_MODELVIEW)
-        
-        self.texture_id = self.load_texture()
-        
+
         self.frame_index = 0
         self.last_time = pygame.time.get_ticks()
         self.animation_speed = 10 # frames per second
-        
+
         self.rotate_x = 0
         self.rotate_y = 0
-        self.zoom = self.calculate_auto_zoom()
+        self.zoom = 50.0
         self.dragging = False
         self.last_mouse_pos = (0, 0)
+
+        self.load_current_file()
+
+    def load_current_file(self):
+        """Load the MDL file at current_index"""
+        if self.texture_id:
+            glDeleteTextures([self.texture_id])
+            self.texture_id = None
+
+        filename = self.mdl_files[self.current_index]
+        print(f"\nLoading: {os.path.basename(filename)} ({self.current_index + 1}/{len(self.mdl_files)})")
+
+        self.mdl = MDL()
+        self.load_error = None
+        try:
+            self.mdl.load(filename)
+            self.texture_id = self.load_texture()
+            self.zoom = self.calculate_auto_zoom()
+        except Exception as e:
+            print(f"Error loading {filename}: {e}")
+            self.load_error = str(e)
+            self.mdl.frames = [{'verts': [], 'name': 'error'}]
+            self.mdl.triangles = []
+            self.zoom = 50.0
+
+        self.frame_index = 0
+        self.rotate_x = 0
+        self.rotate_y = 0
+        pygame.display.set_caption(f"MDL Viewer - {os.path.basename(filename)}")
+
+    def switch_file(self, delta):
+        """Switch to next/previous file"""
+        self.current_index = (self.current_index + delta) % len(self.mdl_files)
+        self.load_current_file()
+
+    def switch_to_index(self, index):
+        """Switch to file at specific index"""
+        if 0 <= index < len(self.mdl_files):
+            self.current_index = index
+            self.load_current_file()
     
     def calculate_auto_zoom(self):
         """Calculate appropriate zoom level based on model bounding box"""
@@ -187,21 +245,60 @@ class MDLViewer:
             print(f"Unsupported skin type: {skin_type}")
             return None
 
-        return None
-
     def handle_input(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    if self.show_file_list:
+                        self.show_file_list = False
+                    else:
+                        pygame.quit()
+                        sys.exit()
+                elif event.key == pygame.K_LEFT:
+                    self.switch_file(-1)
+                elif event.key == pygame.K_RIGHT:
+                    self.switch_file(1)
+                elif event.key == pygame.K_l:
+                    self.show_file_list = not self.show_file_list
+                    self.list_scroll_offset = max(0, self.current_index - 10)
+                elif event.key == pygame.K_UP:
+                    if self.show_file_list:
+                        self.list_scroll_offset = max(0, self.list_scroll_offset - 1)
+                elif event.key == pygame.K_DOWN:
+                    if self.show_file_list:
+                        max_scroll = max(0, len(self.mdl_files) - 20)
+                        self.list_scroll_offset = min(max_scroll, self.list_scroll_offset + 1)
+                elif event.key == pygame.K_RETURN:
+                    if self.show_file_list:
+                        self.show_file_list = False
+                elif event.key == pygame.K_HOME:
+                    self.switch_to_index(0)
+                elif event.key == pygame.K_END:
+                    self.switch_to_index(len(self.mdl_files) - 1)
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
+                if event.button == 4:  # Scroll up
+                    if self.show_file_list:
+                        self.list_scroll_offset = max(0, self.list_scroll_offset - 3)
+                    else:
+                        self.zoom = max(1.0, self.zoom - 2.0)
+                elif event.button == 5:  # Scroll down
+                    if self.show_file_list:
+                        max_scroll = max(0, len(self.mdl_files) - 20)
+                        self.list_scroll_offset = min(max_scroll, self.list_scroll_offset + 3)
+                    else:
+                        self.zoom += 2.0
+                elif self.show_file_list and event.button == 1 and event.pos[0] < 300:
+                    # Click on file list
+                    clicked_idx = self.list_scroll_offset + (event.pos[1] - 100) // 22
+                    if 0 <= clicked_idx < len(self.mdl_files):
+                        self.switch_to_index(clicked_idx)
+                        self.show_file_list = False
+                elif event.button == 1:
                     self.dragging = True
                     self.last_mouse_pos = event.pos
-                elif event.button == 4: # Scroll up
-                    self.zoom = max(1.0, self.zoom - 2.0)
-                elif event.button == 5: # Scroll down
-                    self.zoom += 2.0
             elif event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1:
                     self.dragging = False
@@ -213,9 +310,147 @@ class MDLViewer:
                     self.rotate_x += dy * 0.5
                     self.last_mouse_pos = event.pos
 
+    def render_text(self, text, x, y, color=(255, 255, 255), font=None):
+        """Render text at screen position (x, y)"""
+        if font is None:
+            font = self.font
+        # Sanitize text - remove null characters and non-printable chars
+        text = ''.join(c if c.isprintable() else '' for c in text)
+        if not text:
+            return
+        surface = font.render(text, True, color)
+        text_data = pygame.image.tostring(surface, "RGBA", True)
+        width, height = surface.get_size()
+
+        # Save OpenGL state
+        glPushAttrib(GL_ALL_ATTRIB_BITS)
+        glPushMatrix()
+
+        # Switch to 2D
+        glMatrixMode(GL_PROJECTION)
+        glPushMatrix()
+        glLoadIdentity()
+        glOrtho(0, self.width, 0, self.height, -1, 1)
+        glMatrixMode(GL_MODELVIEW)
+        glLoadIdentity()
+
+        glDisable(GL_DEPTH_TEST)
+        glDisable(GL_CULL_FACE)
+        glEnable(GL_BLEND)
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+        glEnable(GL_TEXTURE_2D)
+
+        tex_id = glGenTextures(1)
+        glBindTexture(GL_TEXTURE_2D, tex_id)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, text_data)
+
+        # Draw quad
+        glBegin(GL_QUADS)
+        glTexCoord2f(0, 0); glVertex2f(x, y)
+        glTexCoord2f(1, 0); glVertex2f(x + width, y)
+        glTexCoord2f(1, 1); glVertex2f(x + width, y + height)
+        glTexCoord2f(0, 1); glVertex2f(x, y + height)
+        glEnd()
+
+        glDeleteTextures([tex_id])
+
+        # Restore
+        glMatrixMode(GL_PROJECTION)
+        glPopMatrix()
+        glMatrixMode(GL_MODELVIEW)
+        glPopMatrix()
+        glPopAttrib()
+
+    def draw_overlay(self):
+        """Draw text overlay with current file info"""
+        # Current file name at top
+        filename = os.path.basename(self.mdl_files[self.current_index])
+        info_text = f"{filename} ({self.current_index + 1}/{len(self.mdl_files)})"
+        self.render_text(info_text, 10, self.height - 30, (255, 255, 255), self.font_large)
+
+        # Controls hint at bottom
+        controls = "Left/Right: navigate | L: file list | Home/End: first/last"
+        self.render_text(controls, 10, 10, (180, 180, 180))
+
+        # Error message if load failed
+        if self.load_error:
+            self.render_text(f"Error: {self.load_error[:80]}", 10, self.height - 55, (255, 100, 100))
+        # Frame info
+        elif self.mdl.frames:
+            frame_idx = int(self.frame_index) % len(self.mdl.frames)
+            frame_name = self.mdl.frames[frame_idx].get('name', '')
+            frame_text = f"Frame: {frame_idx + 1}/{len(self.mdl.frames)}"
+            if frame_name:
+                frame_text += f" ({frame_name})"
+            self.render_text(frame_text, 10, self.height - 55, (200, 200, 200))
+
+        # File list overlay
+        if self.show_file_list:
+            self.draw_file_list()
+
+    def draw_file_list(self):
+        """Draw the file list overlay"""
+        # Background
+        glPushAttrib(GL_ALL_ATTRIB_BITS)
+        glPushMatrix()
+        glMatrixMode(GL_PROJECTION)
+        glPushMatrix()
+        glLoadIdentity()
+        glOrtho(0, self.width, 0, self.height, -1, 1)
+        glMatrixMode(GL_MODELVIEW)
+        glLoadIdentity()
+
+        glDisable(GL_DEPTH_TEST)
+        glDisable(GL_TEXTURE_2D)
+        glEnable(GL_BLEND)
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+
+        # Semi-transparent background
+        glColor4f(0.1, 0.1, 0.1, 0.9)
+        glBegin(GL_QUADS)
+        glVertex2f(0, 0)
+        glVertex2f(320, 0)
+        glVertex2f(320, self.height)
+        glVertex2f(0, self.height)
+        glEnd()
+
+        glMatrixMode(GL_PROJECTION)
+        glPopMatrix()
+        glMatrixMode(GL_MODELVIEW)
+        glPopMatrix()
+        glPopAttrib()
+
+        # Title
+        self.render_text("MDL Files (scroll with mouse/arrows, click to select):", 10, self.height - 70, (255, 255, 100), self.font)
+
+        # File list
+        visible_files = 20
+        y_start = self.height - 100
+        for i in range(visible_files):
+            idx = self.list_scroll_offset + i
+            if idx >= len(self.mdl_files):
+                break
+            name = os.path.basename(self.mdl_files[idx])
+            if len(name) > 35:
+                name = name[:32] + "..."
+            if idx == self.current_index:
+                color = (100, 255, 100)
+                prefix = "> "
+            else:
+                color = (220, 220, 220)
+                prefix = "  "
+            self.render_text(f"{prefix}{idx + 1}. {name}", 10, y_start - i * 22, color)
+
+        # Scroll indicator
+        if len(self.mdl_files) > visible_files:
+            scroll_info = f"Showing {self.list_scroll_offset + 1}-{min(self.list_scroll_offset + visible_files, len(self.mdl_files))} of {len(self.mdl_files)}"
+            self.render_text(scroll_info, 10, 35, (150, 150, 150))
+
     def draw(self):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        
+
         glLoadIdentity()
         glTranslatef(0.0, 0.0, -self.zoom)
         glRotatef(-90, 1, 0, 0) # Quake Z-up to OpenGL Y-up
@@ -347,7 +582,10 @@ class MDLViewer:
                     glVertex3f(vx, vy, vz)
                 
         glEnd()
-        
+
+        # Draw text overlay
+        self.draw_overlay()
+
         pygame.display.flip()
 
     def run(self):
@@ -367,5 +605,6 @@ class MDLViewer:
             clock.tick(60)
 
 if __name__ == "__main__":
-    viewer = MDLViewer("C:\\Users\\Gzalo\\Desktop\\KitoPizzasVol1\\kito_cuerpo.mdl")
+    folder = sys.argv[1] if len(sys.argv) > 1 else "C:\\Users\\Gzalo\\Desktop\\KitoPizzasVol1"
+    viewer = MDLViewer(folder)
     viewer.run()

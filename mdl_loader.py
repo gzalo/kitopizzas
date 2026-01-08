@@ -59,44 +59,63 @@ class MDL:
 
         # Skins
         for _ in range(self.header['num_skins']):
-            group = struct.unpack_from('<I', data, offset)[0]
+            skin_type = struct.unpack_from('<I', data, offset)[0]
             offset += 4
-            print(f"Skin group/type: {group}")
-            
-            if group == 0:
-                width = self.header['skinwidth']
-                height = self.header['skinheight']
+            print(f"Skin type: {skin_type}")
+
+            width = self.header['skinwidth']
+            height = self.header['skinheight']
+
+            if skin_type == 0:
+                # Single 8-bit palettized
                 size = width * height
                 skin_data = data[offset:offset+size]
                 offset += size
                 self.skins.append({'type': 'single_8bit', 'data': skin_data})
-            elif group == 2:
-                width = self.header['skinwidth']
-                height = self.header['skinheight']
+            elif skin_type == 2:
+                # Single 16-bit 565 RGB
                 size = width * height * 2
                 skin_data = data[offset:offset+size]
                 offset += size
                 self.skins.append({'type': 'single_16bit', 'data': skin_data})
-            else:
-                print(f"Group skin detected. Type: {group}")
+            elif skin_type == 3:
+                # Single 16-bit 4444 ARGB
+                size = width * height * 2
+                skin_data = data[offset:offset+size]
+                offset += size
+                self.skins.append({'type': 'single_16bit_4444', 'data': skin_data})
+            elif skin_type == 4:
+                # Single 24-bit 888 RGB
+                size = width * height * 3
+                skin_data = data[offset:offset+size]
+                offset += size
+                self.skins.append({'type': 'single_24bit_888', 'data': skin_data})
+            elif skin_type == 5:
+                # Single 32-bit 8888 ARGB
+                size = width * height * 4
+                skin_data = data[offset:offset+size]
+                offset += size
+                self.skins.append({'type': 'single_32bit_8888', 'data': skin_data})
+            elif skin_type == 1:
+                # Group of 8-bit skins
+                print(f"Group skin detected (8-bit)")
                 nb = struct.unpack_from('<I', data, offset)[0]
                 offset += 4
                 print(f"Number of skins in group: {nb}")
-                
+
                 times = struct.unpack_from(f'<{nb}f', data, offset)
                 offset += nb * 4
-                
-                width = self.header['skinwidth']
-                height = self.header['skinheight']
+
                 size = width * height
-                
                 group_skins = []
                 for i in range(nb):
                     skin_data = data[offset:offset+size]
                     offset += size
                     group_skins.append(skin_data)
-                
+
                 self.skins.append({'type': 'group', 'times': times, 'data': group_skins})
+            else:
+                print(f"Unknown skin type: {skin_type}, skipping skin")
 
         # Texture Coords: onseam (I), s (I), t (I)
         st_fmt = '<III'
