@@ -5,6 +5,8 @@ Corre en Windows 11, pero si se tiene un sistema con mucha RAM, puede dar el err
 
 Encontraste alguna cosa interesante? Podés contribuir a este archivo enviando un pull request.
 
+[Visor de modelos y niveles 3D](viewer/)
+
 # Detalles técnicos
 
 Kito Pizzas usa el motor 3d Game Studio (3DGS) de Conitec, en su versión A6 (6.20). Una versión más moderna y con modo gratuito se puede descargar desde http://www.opserver.de/down/gstudio8_setup.exe. La misma soporta editar los archivos WDL usados en el juego.
@@ -32,8 +34,6 @@ Los archivos del juego están en distintos formatos:
 - MPG: videos
 - TXT: archivos de texto con scripts y datos varios
 
-[Script para crear screenshots de todos los modelos 3D](screenshot_mdl.py)
-
 # Modificar scripts para que corra en motor 3DGS más moderno
 Con un poco de trabajo es posible modificar los scripts del juego para que corran en versiones más modernas del motor 3DGS. 
 Esto solo sirve en una versión completa de la V7, [o el trial de la 6.40](http://download.conitec.net/gsdemo.exe). No se probó en la V8 ya que no conseguí una versión completa.
@@ -51,10 +51,6 @@ En el futuro se automatizarán estos cambios para poder aplicarlos directamente 
 
 Algunos de los cambios rompen funcionalidades del juego, pero permiten correrlo sin errores.
 La lista de cambios fue obtenida de la [documentación de 3DGS, sección "Obsolete Keywords"](http://manual.conitec.net/aAnhang_Syntax.htm).
-
-# Renderizar los modelos MDL fuera del juego
-
-[Script para crear renderizar los modelos MDL](mdl_viewer.py)
 
 # Pantalla inicial para agarrar pizzas
 - POMO.MDL
