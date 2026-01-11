@@ -8,6 +8,7 @@ from viewer_utils import FileNavigator
 import sys
 import os
 import math
+import time
 
 
 class WMBViewer:
@@ -43,6 +44,7 @@ class WMBViewer:
         self.texture_ids = []
         self.lightmap_ids = []
         self.triangulated_faces = []
+        self.render_batches = []
         self.load_error = None
 
         # Camera state
@@ -60,6 +62,23 @@ class WMBViewer:
         # Wireframe mode
         self.wireframe = False
         self.show_lightmaps = True
+
+        # Profiling
+        self.profile_enabled = True
+        self.profile_interval = 60  # Print stats every N frames
+        self.frame_count = 0
+        self.profile_data = {
+            'draw_total': 0.0,
+            'clear_time': 0.0,
+            'setup_time': 0.0,
+            'geometry_time': 0.0,
+            'overlay_time': 0.0,
+            'flip_time': 0.0,
+            'texture_binds': 0,
+            'draw_calls': 0,
+            'triangles': 0,
+            'blocks': 0,
+        }
 
         # Load first file
         self.load_current_file()
@@ -82,9 +101,10 @@ class WMBViewer:
             self.lightmap_ids = self.load_lightmaps()
             self.camera_pos = self.calculate_start_position()
 
-            # Pre-triangulate WMB4/WMB6 faces
+            # Pre-triangulate WMB4/WMB6 faces and build render batches
             if self.wmb.version in [b'WMB4', b'WMB6']:
                 self.triangulated_faces = self.triangulate_faces()
+                self.render_batches = self.build_render_batches()
 
         except Exception as e:
             print(f"Error loading {filename}: {e}")
@@ -195,6 +215,51 @@ class WMBViewer:
 
         print(f"Triangulated {len(self.wmb.faces)} faces into {len(triangles)} triangles")
         return triangles
+
+    def build_render_batches(self):
+        """Pre-build render batches grouped by texture with numpy arrays for vertex arrays"""
+        # Group triangles by texture
+        tex_groups = {}
+        for tri in self.triangulated_faces:
+            tex_idx = tri['texture']
+            if tex_idx not in tex_groups:
+                tex_groups[tex_idx] = []
+            tex_groups[tex_idx].append(tri)
+
+        batches = []
+        for tex_idx, tris in tex_groups.items():
+            # Get texture dimensions for UV scaling
+            tex_width = 64
+            tex_height = 64
+            if tex_idx < len(self.wmb.textures):
+                tex_width = self.wmb.textures[tex_idx]['width']
+                tex_height = self.wmb.textures[tex_idx]['height']
+
+            # Build separate position and UV arrays for vertex arrays
+            num_verts = len(tris) * 3
+            positions = np.empty((num_verts, 3), dtype=np.float32)
+            texcoords = np.empty((num_verts, 2), dtype=np.float32)
+
+            idx = 0
+            for tri in tris:
+                tri_verts = tri['vertices']
+                tri_uvs = tri['uvs']
+                for i in range(3):
+                    v = tri_verts[i]
+                    uv = tri_uvs[i]
+                    positions[idx] = (v[0], v[1], v[2])
+                    texcoords[idx] = (uv[0] / tex_width, uv[1] / tex_height)
+                    idx += 1
+
+            batches.append({
+                'texture_idx': tex_idx,
+                'positions': positions,
+                'texcoords': texcoords,
+                'vertex_count': num_verts
+            })
+
+        print(f"Built {len(batches)} render batches with vertex arrays")
+        return batches
 
     def load_textures(self):
         """Load all textures into OpenGL"""
@@ -391,8 +456,19 @@ class WMBViewer:
             self.camera_pos[2] -= speed
 
     def draw(self):
+        draw_start = time.perf_counter()
+
+        # Reset per-frame profiling counters
+        self.profile_data['texture_binds'] = 0
+        self.profile_data['draw_calls'] = 0
+        self.profile_data['triangles'] = 0
+        self.profile_data['blocks'] = 0
+
+        t0 = time.perf_counter()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glClearColor(0.4, 0.6, 0.8, 1.0)  # Sky blue
+        t1 = time.perf_counter()
+        self.profile_data['clear_time'] += t1 - t0
 
         glLoadIdentity()
 
@@ -417,16 +493,59 @@ class WMBViewer:
         else:
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
 
+        t2 = time.perf_counter()
+        self.profile_data['setup_time'] += t2 - t1
+
         # Draw based on version
         if self.wmb and self.wmb.version in [b'WMB4', b'WMB6']:
             self.draw_wmb6()
         elif self.wmb:
             self.draw_wmb7()
 
+        t3 = time.perf_counter()
+        self.profile_data['geometry_time'] += t3 - t2
+
         # Draw overlay
         self.draw_overlay()
 
+        t4 = time.perf_counter()
+        self.profile_data['overlay_time'] += t4 - t3
+
         pygame.display.flip()
+
+        t5 = time.perf_counter()
+        self.profile_data['flip_time'] += t5 - t4
+
+        # Profiling output
+        if self.profile_enabled:
+            draw_time = time.perf_counter() - draw_start
+            self.profile_data['draw_total'] += draw_time
+            self.frame_count += 1
+
+            if self.frame_count >= self.profile_interval:
+                n = self.frame_count
+                avg_draw = (self.profile_data['draw_total'] / n) * 1000
+                avg_fps = 1000.0 / avg_draw if avg_draw > 0 else 0
+                avg_clear = (self.profile_data['clear_time'] / n) * 1000
+                avg_setup = (self.profile_data['setup_time'] / n) * 1000
+                avg_geom = (self.profile_data['geometry_time'] / n) * 1000
+                avg_overlay = (self.profile_data['overlay_time'] / n) * 1000
+                avg_flip = (self.profile_data['flip_time'] / n) * 1000
+                print(f"[PROFILE] Frame: {avg_draw:.2f}ms ({avg_fps:.1f} FPS) | "
+                      f"Clear: {avg_clear:.2f}ms | Setup: {avg_setup:.2f}ms | "
+                      f"Geometry: {avg_geom:.2f}ms | Overlay: {avg_overlay:.2f}ms | "
+                      f"Flip: {avg_flip:.2f}ms")
+                print(f"          Tex binds: {self.profile_data['texture_binds']} | "
+                      f"Draw calls: {self.profile_data['draw_calls']} | "
+                      f"Triangles: {self.profile_data['triangles']}")
+                # Reset accumulators
+                self.profile_data['draw_total'] = 0.0
+                self.profile_data['clear_time'] = 0.0
+                self.profile_data['setup_time'] = 0.0
+                self.profile_data['geometry_time'] = 0.0
+                self.profile_data['overlay_time'] = 0.0
+                self.profile_data['flip_time'] = 0.0
+                self.frame_count = 0
 
     def draw_overlay(self):
         """Draw file info and controls overlay"""
@@ -450,20 +569,19 @@ class WMBViewer:
         )
 
     def draw_wmb6(self):
-        """Draw WMB6 level geometry"""
-        if not self.triangulated_faces:
+        """Draw WMB6 level geometry using vertex arrays"""
+        if not self.render_batches:
             return
 
-        # Group triangles by texture for efficiency
-        tex_groups = {}
-        for tri in self.triangulated_faces:
-            tex_idx = tri['texture']
-            if tex_idx not in tex_groups:
-                tex_groups[tex_idx] = []
-            tex_groups[tex_idx].append(tri)
+        # Enable vertex arrays
+        glEnableClientState(GL_VERTEX_ARRAY)
 
-        # Draw each texture group
-        for tex_idx, tris in tex_groups.items():
+        for batch in self.render_batches:
+            tex_idx = batch['texture_idx']
+            positions = batch['positions']
+            texcoords = batch['texcoords']
+            vertex_count = batch['vertex_count']
+
             # Bind texture
             has_texture = False
             if not self.wireframe and tex_idx < len(self.texture_ids):
@@ -472,44 +590,39 @@ class WMBViewer:
                     glEnable(GL_TEXTURE_2D)
                     glBindTexture(GL_TEXTURE_2D, tex_id)
                     has_texture = True
+                    self.profile_data['texture_binds'] += 1
 
             if not has_texture and not self.wireframe:
                 glDisable(GL_TEXTURE_2D)
 
             # Set color based on texture for visibility
             if not has_texture:
-                # Use texture index for color variety
                 r = ((tex_idx * 37) % 200 + 55) / 255.0
                 g = ((tex_idx * 71) % 200 + 55) / 255.0
                 b = ((tex_idx * 113) % 200 + 55) / 255.0
                 glColor3f(r, g, b)
+                glDisableClientState(GL_TEXTURE_COORD_ARRAY)
             else:
                 glColor3f(1.0, 1.0, 1.0)
+                glEnableClientState(GL_TEXTURE_COORD_ARRAY)
+                glTexCoordPointer(2, GL_FLOAT, 0, texcoords)
 
-            # Get texture dimensions for UV scaling
-            tex_width = 64
-            tex_height = 64
-            if has_texture and tex_idx < len(self.wmb.textures):
-                tex_width = self.wmb.textures[tex_idx]['width']
-                tex_height = self.wmb.textures[tex_idx]['height']
+            # Set vertex pointer and draw
+            glVertexPointer(3, GL_FLOAT, 0, positions)
+            glDrawArrays(GL_TRIANGLES, 0, vertex_count)
 
-            glBegin(GL_TRIANGLES)
-            for tri in tris:
-                verts = tri['vertices']
-                uvs = tri['uvs']
-                for i, v in enumerate(verts):
-                    if has_texture:
-                        # Use pre-calculated UVs, scaled by texture dimensions
-                        u = uvs[i][0] / tex_width
-                        vt = uvs[i][1] / tex_height
-                        glTexCoord2f(u, vt)
-                    glVertex3f(v[0], v[1], v[2])
-            glEnd()
+            self.profile_data['triangles'] += vertex_count // 3
+            self.profile_data['draw_calls'] += 1
+
+        # Disable vertex arrays
+        glDisableClientState(GL_VERTEX_ARRAY)
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY)
 
     def draw_wmb7(self):
         """Draw WMB7 blocks"""
         for block in self.wmb.blocks:
             self.draw_block(block)
+            self.profile_data['blocks'] += 1
 
     def draw_block(self, block):
         """Draw a single WMB7 block"""
@@ -549,6 +662,7 @@ class WMBViewer:
                     glEnable(GL_TEXTURE_2D)
                     glBindTexture(GL_TEXTURE_2D, tex_id)
                     has_texture = True
+                    self.profile_data['texture_binds'] += 1
 
             if not has_texture and not self.wireframe:
                 glDisable(GL_TEXTURE_2D)
@@ -556,6 +670,7 @@ class WMBViewer:
             glBegin(GL_TRIANGLES)
             for tri in tris:
                 i1, i2, i3 = tri['indices']
+                self.profile_data['triangles'] += 1
 
                 for idx in [i1, i2, i3]:
                     if idx < 0 or idx >= len(vertices):
@@ -569,6 +684,7 @@ class WMBViewer:
                     glVertex3f(vert['pos'][0], vert['pos'][1], vert['pos'][2])
 
             glEnd()
+            self.profile_data['draw_calls'] += 1
 
     def run(self):
         clock = pygame.time.Clock()
