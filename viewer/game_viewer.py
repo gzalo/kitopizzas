@@ -50,13 +50,13 @@ class GameViewer:
 
         # Setup OpenGL state
         glEnable(GL_DEPTH_TEST)
-        glEnable(GL_CULL_FACE)
+        glDisable(GL_CULL_FACE)
         glCullFace(GL_BACK)
 
         # Setup Projection
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
-        gluPerspective(60, (self.width / self.height), 1.0, 50000.0)
+        gluPerspective(60, (self.width / self.height), 1.0, 80000.0)
         glMatrixMode(GL_MODELVIEW)
 
         # WMB data
