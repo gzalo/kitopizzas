@@ -9,7 +9,10 @@ pip install -r requirements.txt
 
 Luego se pueden ejecutar con:
 ```
+python game_viewer.py "C:\\Program Files (x86)\\KitoPizzas Vol 1\\"
+
 python mdl_viewer.py "C:\\Program Files (x86)\\KitoPizzas Vol 1\\"
 
 python wmb_viewer.py "C:\\Program Files (x86)\\KitoPizzas Vol 1\\"
+
 ```
